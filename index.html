@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Interest Calculator | Dark Theme</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .glow-effect {
+        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: #3b82f6;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+      input[type="range"]::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: #3b82f6;
+        cursor: pointer;
+        border-radius: 50%;
+      }
+      .result-card {
+        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-12 max-w-4xl">
+      <header class="text-center mb-12">
+        <h1
+          class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2"
+        >
+          Simple Interest Calculator
+        </h1>
+        <p class="text-gray-400 max-w-lg mx-auto">
+          Calculate how much interest you'll earn on your investment or pay on
+          your loan
+        </p>
+      </header>
+
+      <main class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-6">
+            <div>
+              <label
+                for="principal"
+                class="block text-sm font-medium text-gray-300 mb-2"
+              >
+                <i class="fas fa-money-bill-wave mr-2 text-blue-400"></i
+                >Principal Amount ($)
+              </label>
+              <div class="relative">
+                <input
+                  type="number"
+                  id="principal"
+                  class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="1000"
+                  min="0"
+                  value="1000"
+                />
+                <div
+                  class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+                >
+                  <span class="text-gray-400">₹</span>
+                </div>
+              </div>
+            </div>
+            <button
+              id="download-btn"
+              class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center"
+            >
+              <i class="fas fa-download mr-2"></i> Download Results
+            </button>
+
+            <div>
+              <label
+                for="rate"
+                class="block text-sm font-medium text-gray-300 mb-2"
+              >
+                <i class="fas fa-percent mr-2 text-purple-400"></i>Interest Rate
+                (% per month)
+              </label>
+              <div class="relative">
+                <input
+                  type="range"
+                  id="rate"
+                  min="0"
+                  max="30"
+                  step="0.1"
+                  value="5"
+                  class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
+                />
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                  <span>0%</span>
+                  <span class="font-bold" id="rate-value">5%</span>
+                  <span>30%</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">
+                <i class="far fa-calendar-alt mr-2 text-green-400"></i>Date
+                Range
+              </label>
+              <div class="grid grid-cols-1 gap-4">
+                <div>
+                  <label
+                    for="start-date"
+                    class="block text-xs text-gray-400 mb-1"
+                    >Start Date</label
+                  >
+                  <input
+                    type="date"
+                    id="start-date"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label for="end-date" class="block text-xs text-gray-400 mb-1"
+                    >End Date</label
+                  >
+                  <input
+                    type="date"
+                    id="end-date"
+                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              id="calculate-btn"
+              class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center justify-center glow-effect"
+            >
+              <i class="fas fa-calculator mr-2"></i> Calculate Interest
+            </button>
+          </div>
+
+          <div
+            class="result-card rounded-xl p-6 border border-gray-700 flex flex-col justify-center"
+          >
+            <div class="text-center mb-6">
+              <h3 class="text-xl font-semibold text-gray-300 mb-1">
+                Your Results
+              </h3>
+              <p class="text-sm text-gray-400">Simple interest calculation</p>
+            </div>
+
+            <div class="space-y-4 mb-4">
+              <div
+                class="flex justify-between items-center py-2 border-b border-gray-700"
+              >
+                <span class="text-gray-400">Principal Amount:</span>
+                <span id="result-principal" class="font-medium">₹1,000.00</span>
+              </div>
+              <div
+                class="flex justify-between items-center py-2 border-b border-gray-700"
+              >
+                <span class="text-gray-400">Interest Rate:</span>
+                <span id="result-rate" class="font-medium">5%</span>
+              </div>
+              <div
+                class="flex justify-between items-center py-2 border-b border-gray-700"
+              >
+                <span class="text-gray-400">Time Period:</span>
+                <span id="result-time" class="font-medium">0</span>
+              </div>
+              <div
+                class="flex justify-between items-center py-2 border-b border-gray-700"
+              >
+                <span class="text-gray-400">Interest Amount:</span>
+                <span id="result-interest" class="text-blue-400 font-medium"
+                  >₹00.00</span
+                >
+              </div>
+              <div
+                class="flex justify-between items-center py-2 border-b border-gray-700"
+              >
+                <span class="text-gray-400">Remaining Days:</span>
+                <span id="result-days" class="text-purple-400 font-medium"
+                  >₹00.00</span
+                >
+              </div>
+              <div class="flex justify-between items-center py-3">
+                <span class="text-gray-300 font-semibold">Total Amount:</span>
+                <span id="result-total" class="text-green-400 font-bold text-lg"
+                  >₹00.00</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="mt-12 text-center text-gray-500 text-sm">
+        <p>© 2023 Simple Interest Calculator. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
