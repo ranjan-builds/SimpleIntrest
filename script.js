@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const resultInterest = document.getElementById("result-interest");
   const resultDays = document.getElementById("result-days");
   const resultTotal = document.getElementById("result-total");
+  const copyrightyear = document.getElementById("copyrightyear");
 
   // Update rate value display
   rateInput.addEventListener("input", function () {
@@ -27,11 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const today = new Date();
   const oneYearLater = new Date();
   oneYearLater.setFullYear(today.getFullYear() + 1);
-
-  // endDateInput.valueAsDate = today;
-  // endDateInput.valueAsDate = oneYearLater;
-
-  // Only calculate when button is clicked
+  copyrightyear.innerText = today.getFullYear()
+  
   calculateBtn.addEventListener("click", calculateInterest);
 
   function calculateInterest() {
