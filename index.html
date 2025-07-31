@@ -57,12 +57,13 @@
                 class="block text-sm font-medium text-gray-300 mb-2"
               >
                 <i class="fas fa-money-bill-wave mr-2 text-blue-400"></i
-                >Principal Amount ($)
+                >Principal Amount (₹)
               </label>
               <div class="relative">
                 <input
                   type="number"
                   id="principal"
+                  required
                   class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="1000"
                   min="0"
@@ -75,12 +76,6 @@
                 </div>
               </div>
             </div>
-            <button
-              id="download-btn"
-              class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center"
-            >
-              <i class="fas fa-download mr-2"></i> Download Results
-            </button>
 
             <div>
               <label
@@ -96,7 +91,7 @@
                   id="rate"
                   min="0"
                   max="30"
-                  step="0.1"
+                  step="1"
                   value="5"
                   class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
                 />
@@ -123,6 +118,7 @@
                   <input
                     type="date"
                     id="start-date"
+                    required
                     class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -133,6 +129,7 @@
                   <input
                     type="date"
                     id="end-date"
+                    required
                     class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -145,6 +142,12 @@
             >
               <i class="fas fa-calculator mr-2"></i> Calculate Interest
             </button>
+            <button
+              id="download-btn"
+              class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center"
+            >
+              <i class="fas fa-download mr-2"></i> Download Results
+            </button>
           </div>
 
           <div
@@ -152,9 +155,9 @@
           >
             <div class="text-center mb-6">
               <h3 class="text-xl font-semibold text-gray-300 mb-1">
-                Your Results
+                Acknowledgment
               </h3>
-              <p class="text-sm text-gray-400">Simple interest calculation</p>
+              <p class="text-xs text-gray-400">Simple interest calculation</p>
             </div>
 
             <div class="space-y-4 mb-4">
@@ -198,6 +201,9 @@
                   >₹00.00</span
                 >
               </div>
+            </div>
+            <div class="text-center">
+              <p class="text-xs text-gray-600">Ranjan | Made with ♡</p>
             </div>
           </div>
         </div>
