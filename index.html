@@ -1,219 +1,437 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Interest Calculator | Dark Theme</title>
+    <title>Simple Interest Calculator</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              app: {
+                bg: "#131314" /* Gemini Deep Background */,
+                card: "#1E1F20" /* Gemini Surface */,
+                input: "#282A2C" /* Gemini Input/Secondary Surface */,
+                border: "#444746" /* Gemini Border */,
+                accent: "#A8C7FA" /* Gemini Primary Blue */,
+                success: "#81C995" /* Gemini Green */,
+              },
+            },
+            boxShadow: {
+              "glow-blue": "0 0 20px -5px rgba(168, 199, 250, 0.15)",
+              "glow-green": "0 0 20px -5px rgba(129, 201, 149, 0.15)",
+            },
+          },
+        },
+      };
+    </script>
+
     <style>
-      .glow-effect {
-        box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #131314;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #444746;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #a8c7fa;
+      }
+
+      /* Range Slider Customization */
+      input[type="range"] {
+        -webkit-appearance: none;
+        background: transparent;
+      }
+      input[type="range"]::-webkit-slider-runnable-track {
+        width: 100%;
+        height: 6px;
+        background: #444746;
+        border-radius: 999px;
       }
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        appearance: none;
-        width: 18px;
-        height: 18px;
-        background: #3b82f6;
-        cursor: pointer;
+        height: 20px;
+        width: 20px;
         border-radius: 50%;
-      }
-      input[type="range"]::-moz-range-thumb {
-        width: 18px;
-        height: 18px;
-        background: #3b82f6;
+        background: #a8c7fa;
+        margin-top: -7px;
+        box-shadow: 0 0 10px rgba(168, 199, 250, 0.3);
         cursor: pointer;
-        border-radius: 50%;
+        border: 2px solid #1e1f20;
+        transition: transform 0.1s;
       }
-      .result-card {
-        background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.1);
+      }
+
+      /* Date input calendar icon filter for dark mode */
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+        opacity: 0.6;
+      }
+      input[type="date"]::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+      }
+
+      /* Receipt card styling for clean export */
+      .receipt-card {
+        background: linear-gradient(145deg, #1e1f20 0%, #131314 100%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
       }
     </style>
   </head>
-  <body class="bg-gray-900 text-gray-100 min-h-screen">
-    <div class="container mx-auto px-4 py-12 max-w-4xl">
+
+  <body
+    class="bg-app-bg text-gray-200 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-app-accent selection:text-app-bg"
+  >
+    <!-- Ambient Background Glows -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <div
+        class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-app-accent/5 blur-[120px]"
+      ></div>
+      <div
+        class="absolute top-[60%] -right-[10%] w-[50%] h-[60%] rounded-full bg-app-accent/5 blur-[120px]"
+      ></div>
+    </div>
+
+    <div class="container mx-auto px-4 py-10 max-w-5xl relative z-10">
+      <!-- Header -->
       <header class="text-center mb-12">
-        <h1
-          class="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2"
+        <div
+          class="inline-flex items-center justify-center p-3 mb-4 rounded-2xl bg-app-input text-app-accent border border-app-border"
         >
-          Simple Interest Calculator
+          <i class="fa-brands fa-mailchimp"></i>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+          <span class="text-gray-100">Yield</span
+          ><span class="text-app-accent">Calc</span>
         </h1>
-        <p class="text-gray-400 max-w-lg mx-auto">
-          Calculate how much interest you'll earn on your investment or pay on
-          your loan
+        <p class="text-gray-400 max-w-lg mx-auto text-lg">
+          Professional interest calculation for your investments and loans.
         </p>
       </header>
 
-      <main class="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="space-y-6">
-            <div>
+      <main
+        class="bg-app-card rounded-3xl p-6 md:p-10 shadow-2xl border border-app-border"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <!-- Input Form Section -->
+          <div class="lg:col-span-7 space-y-8">
+            <!-- Principal Input -->
+            <div class="space-y-3">
               <label
                 for="principal"
-                class="block text-sm font-medium text-gray-300 mb-2"
+                class="block text-sm font-semibold text-gray-300"
               >
-                <i class="fas fa-money-bill-wave mr-2 text-blue-400"></i
-                >Principal Amount (₹)
+                Principal Amount
               </label>
-              <div class="relative">
+              <div class="relative group">
+                <div
+                  class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
+                >
+                  <span class="text-gray-400 font-medium text-lg">₹</span>
+                </div>
                 <input
-                  type="number"
+                  type="text"
+                  inputmode="numeric"
                   id="principal"
                   required
-                  class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="1000"
-                  min="0"
-                  value="1000"
+                  class="w-full bg-app-input border border-app-border rounded-xl pl-10 pr-4 py-4 text-gray-100 font-medium text-lg focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all shadow-sm"
+                  placeholder="10,000"
+                  value="10,000"
                 />
-                <div
-                  class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none"
+              </div>
+            </div>
+
+            <!-- Rate Slider -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-end">
+                <label
+                  for="rate"
+                  class="block text-sm font-semibold text-gray-300"
                 >
-                  <span class="text-gray-400">₹</span>
+                  Monthly Interest Rate
+                </label>
+                <div
+                  class="px-3 py-1 bg-app-input rounded-lg border border-app-border"
+                >
+                  <span
+                    class="font-bold text-app-accent text-lg"
+                    id="rate-value"
+                    >3%</span
+                  >
                 </div>
               </div>
-            </div>
-
-            <div>
-              <label
-                for="rate"
-                class="block text-sm font-medium text-gray-300 mb-2"
+              <input
+                type="range"
+                id="rate"
+                min="0"
+                max="30"
+                step="0.1"
+                value="3"
+                class="w-full mt-2"
+              />
+              <div
+                class="flex justify-between text-xs text-gray-500 font-medium px-1"
               >
-                <i class="fas fa-percent mr-2 text-purple-400"></i>Interest Rate
-                (% per month)
+                <span>0%</span>
+                <span>15%</span>
+                <span>30%</span>
+              </div>
+            </div>
+
+            <!-- Date Range -->
+            <div class="space-y-3">
+              <label class="block text-sm font-semibold text-gray-300">
+                Duration Period
+                <span class="text-xs text-gray-500 font-normal ml-2"
+                  >(DD/MM/YYYY)</span
+                >
               </label>
-              <div class="relative">
-                <input
-                  type="range"
-                  id="rate"
-                  min="0"
-                  max="30"
-                  step="1"
-                  value="5"
-                  class="w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer"
-                />
-                <div class="flex justify-between text-xs text-gray-400 mt-1">
-                  <span>0%</span>
-                  <span class="font-bold" id="rate-value">5%</span>
-                  <span>30%</span>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Start Date -->
+                <div class="space-y-2">
+                  <span
+                    class="text-xs text-gray-400 font-medium uppercase tracking-wider"
+                    >Start Date</span
+                  >
+                  <div class="relative flex items-center">
+                    <input
+                      type="text"
+                      id="start-date-text"
+                      placeholder="DD/MM/YYYY"
+                      maxlength="10"
+                      class="w-full bg-app-input border border-app-border rounded-xl px-4 py-3.5 text-gray-100 font-medium focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all"
+                    />
+                    <div
+                      class="absolute right-3 text-gray-400 hover:text-app-accent transition-colors z-10 flex items-center justify-center w-8 h-8"
+                    >
+                      <i class="fas fa-calendar-alt text-lg"></i>
+                      <input
+                        type="date"
+                        id="start-date"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!-- End Date -->
+                <div class="space-y-2">
+                  <span
+                    class="text-xs text-gray-400 font-medium uppercase tracking-wider"
+                    >End Date</span
+                  >
+                  <div class="relative flex items-center">
+                    <input
+                      type="text"
+                      id="end-date-text"
+                      placeholder="DD/MM/YYYY"
+                      maxlength="10"
+                      class="w-full bg-app-input border border-app-border rounded-xl px-4 py-3.5 text-gray-100 font-medium focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all"
+                    />
+                    <div
+                      class="absolute right-3 text-gray-400 hover:text-app-accent transition-colors z-10 flex items-center justify-center w-8 h-8"
+                    >
+                      <i class="fas fa-calendar-alt text-lg"></i>
+                      <input
+                        type="date"
+                        id="end-date"
+                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div>
-              <label class="block text-sm font-medium text-gray-300 mb-2">
-                <i class="far fa-calendar-alt mr-2 text-green-400"></i>Date
-                Range
-              </label>
-              <div class="grid grid-cols-1 gap-4">
-                <div>
-                  <label
-                    for="start-date"
-                    class="block text-xs text-gray-400 mb-1"
-                    >Start Date</label
-                  >
-                  <input
-                    type="date"
-                    id="start-date"
-                    required
-                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                <div>
-                  <label for="end-date" class="block text-xs text-gray-400 mb-1"
-                    >End Date</label
-                  >
-                  <input
-                    type="date"
-                    id="end-date"
-                    required
-                    class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-              </div>
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+              <button
+                id="calculate-btn"
+                class="flex-1 bg-app-accent hover:bg-[#8ab4f8] text-app-bg font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-glow-blue flex items-center justify-center gap-2"
+              >
+                <i class="fas fa-calculator"></i> Calculate Yield
+              </button>
+              <button
+                id="download-btn"
+                class="sm:w-auto w-full bg-app-input hover:bg-[#343638] border border-app-border text-gray-200 font-semibold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <i class="fas fa-arrow-down"></i> Export
+              </button>
             </div>
-
-            <button
-              id="calculate-btn"
-              class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium py-3 px-4 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center justify-center glow-effect"
-            >
-              <i class="fas fa-calculator mr-2"></i> Calculate Interest
-            </button>
-            <button
-              id="download-btn"
-              class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-medium py-3 px-4 rounded-lg hover:from-green-600 hover:to-blue-700 transition-all duration-300 flex items-center justify-center"
-            >
-              <i class="fas fa-download mr-2"></i> Download Results
-            </button>
           </div>
 
-          <div
-            class="result-card rounded-xl p-6 border border-gray-700 flex flex-col justify-center"
-          >
-            <div class="text-center mb-6">
-              <h3 class="text-xl font-semibold text-gray-300 mb-1">
-                Acknowledgment
-              </h3>
-              <p class="text-xs text-gray-400">Simple interest calculation</p>
-            </div>
+          <!-- Result Card Section -->
+          <div class="lg:col-span-5 relative">
+            <div
+              id="receipt-capture-area"
+              class="receipt-card rounded-2xl border border-app-border p-8 h-full flex flex-col relative overflow-hidden"
+            >
+              <!-- Card Decoration -->
+              <div
+                class="absolute top-0 right-0 w-32 h-32 bg-app-accent/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"
+              ></div>
 
-            <div class="space-y-4 mb-4">
               <div
-                class="flex justify-between items-center py-2 border-b border-gray-700"
+                class="flex items-center justify-between mb-8 pb-6 border-b border-white/5"
               >
-                <span class="text-gray-400">Principal Amount:</span>
-                <span id="result-principal" class="font-medium">₹1,000.00</span>
-              </div>
-              <div
-                class="flex justify-between items-center py-2 border-b border-gray-700"
-              >
-                <span class="text-gray-400">Interest Rate:</span>
-                <span id="result-rate" class="font-medium">5%</span>
-              </div>
-              <div
-                class="flex justify-between items-center py-2 border-b border-gray-700"
-              >
-                <span class="text-gray-400">Time Period:</span>
-                <span id="result-time" class="font-medium">0</span>
-              </div>
-              <div
-                class="flex justify-between items-center py-2 border-b border-gray-700"
-              >
-                <span class="text-gray-400">Interest Amount:</span>
-                <span id="result-interest" class="text-blue-400 font-medium"
-                  >₹00.00</span
+                <div>
+                  <h3
+                    class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1"
+                  >
+                    Statement
+                  </h3>
+                  <p class="text-lg font-bold text-gray-100">
+                    Yield Assessment
+                  </p>
+                </div>
+                <div
+                  class="h-10 w-10 rounded-full bg-app-input flex items-center justify-center border border-app-border shadow-sm"
                 >
+                  <i class="fas fa-check text-app-accent"></i>
+                </div>
               </div>
-              <div
-                class="flex justify-between items-center py-2 border-b border-gray-700"
-              >
-                <span class="text-gray-400">Remaining Days:</span>
-                <span id="result-days" class="text-purple-400 font-medium"
-                  >₹00.00</span
-                >
+
+              <div class="flex-grow space-y-5">
+                <!-- Principal -->
+                <div class="flex justify-between items-center group">
+                  <span class="text-gray-400 text-sm">Principal Amount</span>
+                  <span id="result-principal" class="font-medium text-gray-200"
+                    >₹0.00</span
+                  >
+                </div>
+
+                <!-- Rate -->
+                <div class="flex justify-between items-center group">
+                  <span class="text-gray-400 text-sm">Monthly Rate</span>
+                  <span id="result-rate" class="font-medium text-gray-200"
+                    >0%</span
+                  >
+                </div>
+
+                <!-- Period -->
+                <div class="flex justify-between items-start group">
+                  <span class="text-gray-400 text-sm mt-0.5">Duration</span>
+                  <div class="text-right">
+                    <span
+                      id="result-duration-text"
+                      class="font-medium text-gray-200 block"
+                      >0 Months</span
+                    >
+                    <span
+                      id="result-date-range"
+                      class="text-xs text-gray-500 mt-1 block"
+                      >-- to --</span
+                    >
+                  </div>
+                </div>
+
+                <div
+                  class="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-6"
+                ></div>
+
+                <!-- Interest Breakdown -->
+                <div class="flex justify-between items-center group">
+                  <span class="text-gray-400 text-sm">1 Month Interest</span>
+                  <span id="result-1-month" class="font-medium text-gray-200"
+                    >₹0.00</span
+                  >
+                </div>
+                <div class="flex justify-between items-center group mt-2">
+                  <span class="text-gray-400 text-sm">Interest for Months</span>
+                  <span
+                    id="result-interest-months"
+                    class="font-medium text-app-accent"
+                    >₹0.00</span
+                  >
+                </div>
+                <div class="flex justify-between items-center group mt-2">
+                  <span class="text-gray-400 text-sm">Pro-rata (Days)</span>
+                  <span
+                    id="result-interest-days"
+                    class="font-medium text-app-accent"
+                    >₹0.00</span
+                  >
+                </div>
+
+                <div class="flex justify-between items-center pt-2">
+                  <span class="text-gray-300 font-medium">Total Interest</span>
+                  <span
+                    id="result-total-interest"
+                    class="font-bold text-app-accent"
+                    >₹0.00</span
+                  >
+                </div>
               </div>
-              <div class="flex justify-between items-center py-3">
-                <span class="text-gray-300 font-semibold">Total Amount:</span>
-                <span id="result-total" class="text-green-400 font-bold text-lg"
-                  >₹00.00</span
-                >
+
+              <!-- Grand Total -->
+              <div class="mt-8 pt-6 border-t border-white/5">
+                <div class="flex justify-between items-end">
+                  <span class="text-gray-400 font-medium mb-1"
+                    >Maturity Amount</span
+                  >
+                  <span
+                    id="result-total"
+                    class="text-3xl font-bold text-app-success tracking-tight drop-shadow-sm"
+                    >₹0.00</span
+                  >
+                </div>
               </div>
-            </div>
-            <div class="text-center">
-              <p class="text-xs text-gray-600">Ranjan | Made with ♡</p>
+
+              <!-- Watermark/Footer inside card -->
+              <div class="mt-8 text-center opacity-50">
+                <p class="text-[10px] text-gray-500 uppercase tracking-widest">
+                  Generated by YieldCalc
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </main>
 
-      <footer class="mt-12 text-center text-gray-500 text-sm">
-        <p>© <span id="copyrightyear"></span> Simple Interest Calculator. All rights reserved.</p>
+      <footer class="mt-12 text-center text-gray-500 text-sm font-medium">
+        <p>
+          © <span id="copyrightyear"></span> YieldCalc. Crafted by
+          <a
+            href="https://github.com/ranjan-builds"
+            target="_blank"
+            class="text-app-accent hover:text-[#8ab4f8] transition-colors underline underline-offset-4 decoration-app-accent/30 hover:decoration-app-accent"
+            >Ranjan</a
+          >.
+        </p>
       </footer>
     </div>
 
+    <!-- External Libraries -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="script.js"></script>
   </body>
