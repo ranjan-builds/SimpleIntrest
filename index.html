@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Interest Calculator</title>
+    <title>Simple Interest Calculator | Premium</title>
 
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter & JetBrains Mono for numbers -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
 
@@ -29,20 +29,28 @@
           extend: {
             fontFamily: {
               sans: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
             },
             colors: {
               app: {
-                bg: "#131314" /* Gemini Deep Background */,
-                card: "#1E1F20" /* Gemini Surface */,
-                input: "#282A2C" /* Gemini Input/Secondary Surface */,
-                border: "#444746" /* Gemini Border */,
-                accent: "#A8C7FA" /* Gemini Primary Blue */,
-                success: "#81C995" /* Gemini Green */,
+                bg: "#09090B" /* Zinc 950 */,
+                card: "rgba(24, 24, 27, 0.65)" /* Zinc 900 w/ opacity */,
+                solid: "#18181B" /* Zinc 900 Solid */,
+                input: "#09090B" /* Zinc 950 */,
+                border: "#27272A" /* Zinc 800 */,
+                accent1: "#6366F1" /* Indigo 500 */,
+                accent2: "#06B6D4" /* Cyan 500 */,
+                success: "#10B981" /* Emerald 500 */,
               },
             },
             boxShadow: {
-              "glow-blue": "0 0 20px -5px rgba(168, 199, 250, 0.15)",
-              "glow-green": "0 0 20px -5px rgba(129, 201, 149, 0.15)",
+              "glow-accent": "0 0 30px -5px rgba(99, 102, 241, 0.3)",
+              "inner-light": "inset 0 1px 0 0 rgba(255, 255, 255, 0.05)",
+            },
+            backgroundImage: {
+              "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+              "gradient-mesh":
+                "linear-gradient(to right right, var(--tw-gradient-stops))",
             },
           },
         },
@@ -52,17 +60,33 @@
     <style>
       /* Custom Scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
-        background: #131314;
+        background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #444746;
+        background: #27272a;
         border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #a8c7fa;
+        background: #6366f1;
+      }
+
+      /* Technical Grid Background Pattern */
+      .bg-grid-pattern {
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+        background-size: 40px 40px;
       }
 
       /* Range Slider Customization */
@@ -72,100 +96,120 @@
       }
       input[type="range"]::-webkit-slider-runnable-track {
         width: 100%;
-        height: 6px;
-        background: #444746;
+        height: 8px;
+        background: #27272a;
         border-radius: 999px;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
       }
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        height: 20px;
-        width: 20px;
+        height: 24px;
+        width: 24px;
         border-radius: 50%;
-        background: #a8c7fa;
-        margin-top: -7px;
-        box-shadow: 0 0 10px rgba(168, 199, 250, 0.3);
+        background: linear-gradient(135deg, #6366f1, #06b6d4);
+        margin-top: -8px;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
         cursor: pointer;
-        border: 2px solid #1e1f20;
-        transition: transform 0.1s;
+        border: 2px solid #fff;
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       }
       input[type="range"]::-webkit-slider-thumb:hover {
-        transform: scale(1.1);
+        transform: scale(1.15);
       }
 
-      /* Date input calendar icon filter for dark mode */
+      /* Date input calendar icon filter */
       input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(1);
+        filter: invert(1) opacity(0.5);
         cursor: pointer;
-        opacity: 0.6;
+        transition: 0.2s;
       }
       input[type="date"]::-webkit-calendar-picker-indicator:hover {
-        opacity: 1;
+        filter: invert(1) opacity(1);
       }
 
       /* Receipt card styling for clean export */
       .receipt-card {
-        background: linear-gradient(145deg, #1e1f20 0%, #131314 100%);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+        background: linear-gradient(145deg, #18181b 0%, #09090b 100%);
+      }
+
+      /* Smooth number transitions */
+      .mono-num {
+        font-family: "JetBrains Mono", monospace;
+        font-variant-numeric: tabular-nums;
       }
     </style>
   </head>
 
   <body
-    class="bg-app-bg text-gray-200 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-app-accent selection:text-app-bg"
+    class="bg-app-bg text-gray-300 font-sans antialiased min-h-screen relative overflow-x-hidden selection:bg-app-accent1 selection:text-white"
   >
-    <!-- Ambient Background Glows -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+    <!-- Background Elements -->
+    <div
+      class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"
+      data-html2canvas-ignore="true"
+    ></div>
+    <div
+      class="fixed inset-0 overflow-hidden pointer-events-none z-0"
+      data-html2canvas-ignore="true"
+    >
       <div
-        class="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] rounded-full bg-app-accent/5 blur-[120px]"
+        class="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-app-accent1/10 blur-[120px]"
       ></div>
       <div
-        class="absolute top-[60%] -right-[10%] w-[50%] h-[60%] rounded-full bg-app-accent/5 blur-[120px]"
+        class="absolute top-[40%] -right-[10%] w-[40%] h-[50%] rounded-full bg-app-accent2/10 blur-[120px]"
       ></div>
     </div>
 
-    <div class="container mx-auto px-4 py-10 max-w-5xl relative z-10">
+    <div class="container mx-auto px-4 py-8 md:py-12 max-w-6xl relative z-10">
       <!-- Header -->
-      <header class="text-center mb-12">
+      <header class="text-center mb-10 md:mb-16">
         <div
-          class="inline-flex items-center justify-center p-3 mb-4 rounded-2xl bg-app-input text-app-accent border border-app-border"
+          class="inline-flex items-center justify-center p-3 mb-6 rounded-2xl bg-app-solid/50 backdrop-blur-md border border-white/5 shadow-inner-light text-white"
         >
-          <i class="fa-brands fa-mailchimp"></i>
+          <i
+            class="fas fa-layer-group text-xl bg-clip-text text-transparent bg-gradient-to-r from-app-accent1 to-app-accent2"
+          ></i>
         </div>
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-          <span class="text-gray-100">Yield</span
-          ><span class="text-app-accent">Calc</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+          <span class="text-white">Yield</span
+          ><span
+            class="bg-clip-text text-transparent bg-gradient-to-r from-app-accent1 to-app-accent2"
+            >Calc</span
+          >
         </h1>
-        <p class="text-gray-400 max-w-lg mx-auto text-lg">
-          Professional interest calculation for your investments and loans.
+        <p
+          class="text-gray-400 max-w-lg mx-auto text-base md:text-lg font-medium"
+        >
+          Next-generation precision tools for financial forecasting.
         </p>
       </header>
 
       <main
-        class="bg-app-card rounded-3xl p-6 md:p-10 shadow-2xl border border-app-border"
+        class="bg-app-card backdrop-blur-xl rounded-[2rem] p-6 md:p-10 shadow-2xl border border-white/10 shadow-inner-light"
       >
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 md:gap-14">
           <!-- Input Form Section -->
           <div class="lg:col-span-7 space-y-8">
             <!-- Principal Input -->
-            <div class="space-y-3">
+            <div class="space-y-3 relative z-20">
               <label
                 for="principal"
-                class="block text-sm font-semibold text-gray-300"
+                class="block text-sm font-semibold text-gray-200 tracking-wide uppercase"
               >
                 Principal Amount
               </label>
               <div class="relative group">
                 <div
-                  class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none"
+                  class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none"
                 >
-                  <span class="text-gray-400 font-medium text-lg">₹</span>
+                  <span class="text-gray-400 font-medium text-xl">₹</span>
                 </div>
                 <input
                   type="text"
                   inputmode="numeric"
                   id="principal"
                   required
-                  class="w-full bg-app-input border border-app-border rounded-xl pl-10 pr-4 py-4 text-gray-100 font-medium text-lg focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all shadow-sm"
+                  class="w-full bg-app-input border border-app-border rounded-2xl pl-12 pr-5 py-5 text-white mono-num text-xl focus:outline-none focus:ring-2 focus:ring-app-accent1/50 focus:border-app-accent1 transition-all shadow-inner"
                   placeholder="10,000"
                   value="10,000"
                 />
@@ -173,55 +217,60 @@
             </div>
 
             <!-- Rate Slider -->
-            <div class="space-y-4">
+            <div class="space-y-5">
               <div class="flex justify-between items-end">
                 <label
                   for="rate"
-                  class="block text-sm font-semibold text-gray-300"
+                  class="block text-sm font-semibold text-gray-200 tracking-wide uppercase"
                 >
                   Monthly Interest Rate
                 </label>
                 <div
-                  class="px-3 py-1 bg-app-input rounded-lg border border-app-border"
+                  class="px-4 py-1.5 bg-app-input rounded-xl border border-app-border shadow-inner"
                 >
                   <span
-                    class="font-bold text-app-accent text-lg"
+                    class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-accent1 to-app-accent2 text-xl mono-num"
                     id="rate-value"
                     >3%</span
                   >
                 </div>
               </div>
-              <input
-                type="range"
-                id="rate"
-                min="0"
-                max="30"
-                step="0.1"
-                value="3"
-                class="w-full mt-2"
-              />
-              <div
-                class="flex justify-between text-xs text-gray-500 font-medium px-1"
-              >
-                <span>0%</span>
-                <span>15%</span>
-                <span>30%</span>
+              <div class="pt-2">
+                <input
+                  type="range"
+                  id="rate"
+                  min="0"
+                  max="30"
+                  step="0.1"
+                  value="3"
+                  class="w-full"
+                />
+                <div
+                  class="flex justify-between text-xs text-gray-500 font-medium px-1 mt-3"
+                >
+                  <span>0%</span>
+                  <span>15%</span>
+                  <span>30%</span>
+                </div>
               </div>
             </div>
 
             <!-- Date Range -->
-            <div class="space-y-3">
-              <label class="block text-sm font-semibold text-gray-300">
+            <div class="space-y-4">
+              <label
+                class="block text-sm font-semibold text-gray-200 tracking-wide uppercase"
+              >
                 Duration Period
-                <span class="text-xs text-gray-500 font-normal ml-2"
+                <span
+                  class="text-xs text-gray-500 font-normal ml-2 normal-case tracking-normal"
                   >(DD/MM/YYYY)</span
                 >
               </label>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <!-- Start Date -->
                 <div class="space-y-2">
                   <span
-                    class="text-xs text-gray-400 font-medium uppercase tracking-wider"
+                    class="text-xs text-gray-500 font-medium uppercase tracking-wider"
                     >Start Date</span
                   >
                   <div class="relative flex items-center">
@@ -230,10 +279,10 @@
                       id="start-date-text"
                       placeholder="DD/MM/YYYY"
                       maxlength="10"
-                      class="w-full bg-app-input border border-app-border rounded-xl px-4 py-3.5 text-gray-100 font-medium focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all"
+                      class="w-full bg-app-input border border-app-border rounded-2xl px-5 py-4 text-white mono-num focus:outline-none focus:ring-2 focus:ring-app-accent1/50 focus:border-app-accent1 transition-all shadow-inner"
                     />
                     <div
-                      class="absolute right-3 text-gray-400 hover:text-app-accent transition-colors z-10 flex items-center justify-center w-8 h-8"
+                      class="absolute right-4 text-gray-500 hover:text-app-accent2 transition-colors z-10 flex items-center justify-center w-8 h-8"
                     >
                       <i class="fas fa-calendar-alt text-lg"></i>
                       <input
@@ -247,7 +296,7 @@
                 <!-- End Date -->
                 <div class="space-y-2">
                   <span
-                    class="text-xs text-gray-400 font-medium uppercase tracking-wider"
+                    class="text-xs text-gray-500 font-medium uppercase tracking-wider"
                     >End Date</span
                   >
                   <div class="relative flex items-center">
@@ -256,10 +305,10 @@
                       id="end-date-text"
                       placeholder="DD/MM/YYYY"
                       maxlength="10"
-                      class="w-full bg-app-input border border-app-border rounded-xl px-4 py-3.5 text-gray-100 font-medium focus:outline-none focus:ring-2 focus:ring-app-accent/50 focus:border-app-accent transition-all"
+                      class="w-full bg-app-input border border-app-border rounded-2xl px-5 py-4 text-white mono-num focus:outline-none focus:ring-2 focus:ring-app-accent1/50 focus:border-app-accent1 transition-all shadow-inner"
                     />
                     <div
-                      class="absolute right-3 text-gray-400 hover:text-app-accent transition-colors z-10 flex items-center justify-center w-8 h-8"
+                      class="absolute right-4 text-gray-500 hover:text-app-accent2 transition-colors z-10 flex items-center justify-center w-8 h-8"
                     >
                       <i class="fas fa-calendar-alt text-lg"></i>
                       <input
@@ -274,18 +323,27 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 pt-4">
+            <div class="flex flex-col sm:flex-row gap-4 pt-6">
               <button
                 id="calculate-btn"
-                class="flex-1 bg-app-accent hover:bg-[#8ab4f8] text-app-bg font-semibold py-4 px-6 rounded-xl transition-all duration-300 shadow-glow-blue flex items-center justify-center gap-2"
+                class="flex-1 relative group overflow-hidden bg-white text-app-bg font-bold py-4 px-6 rounded-2xl transition-all duration-300 shadow-glow-accent flex items-center justify-center gap-3 hover:scale-[1.02]"
               >
-                <i class="fas fa-calculator"></i> Calculate Yield
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-app-accent1 to-app-accent2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                ></div>
+                <i
+                  class="fas fa-bolt relative z-10 group-hover:text-white transition-colors duration-300"
+                ></i>
+                <span
+                  class="relative z-10 group-hover:text-white transition-colors duration-300"
+                  >Calculate Yield</span
+                >
               </button>
               <button
                 id="download-btn"
-                class="sm:w-auto w-full bg-app-input hover:bg-[#343638] border border-app-border text-gray-200 font-semibold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                class="sm:w-auto w-full bg-app-input hover:bg-app-border border border-app-border text-white font-medium py-4 px-8 rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 shadow-inner"
               >
-                <i class="fas fa-arrow-down"></i> Export
+                <i class="fas fa-arrow-down text-gray-400"></i> Export
               </button>
             </div>
           </div>
@@ -294,75 +352,86 @@
           <div class="lg:col-span-5 relative">
             <div
               id="receipt-capture-area"
-              class="receipt-card rounded-2xl border border-app-border p-8 h-full flex flex-col relative overflow-hidden"
+              class="receipt-card rounded-[2rem] border border-white/10 p-7 md:p-9 h-full flex flex-col relative overflow-hidden shadow-2xl shadow-black/50"
             >
               <!-- Card Decoration -->
               <div
-                class="absolute top-0 right-0 w-32 h-32 bg-app-accent/5 rounded-full blur-2xl -mr-10 -mt-10 pointer-events-none"
+                class="absolute -top-20 -right-20 w-48 h-48 bg-gradient-to-br from-app-accent1/20 to-app-accent2/20 rounded-full blur-3xl pointer-events-none"
+                data-html2canvas-ignore="true"
               ></div>
 
               <div
-                class="flex items-center justify-between mb-8 pb-6 border-b border-white/5"
+                class="flex items-center justify-between mb-8 pb-6 border-b border-white/10"
               >
                 <div>
                   <h3
-                    class="text-xs uppercase tracking-widest text-gray-500 font-semibold mb-1"
+                    class="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-1"
                   >
-                    Statement
+                    Official Statement
                   </h3>
-                  <p class="text-lg font-bold text-gray-100">
-                    Yield Assessment
-                  </p>
+                  <p class="text-xl font-bold text-white">Yield Assessment</p>
                 </div>
                 <div
-                  class="h-10 w-10 rounded-full bg-app-input flex items-center justify-center border border-app-border shadow-sm"
+                  class="h-12 w-12 rounded-2xl bg-gradient-to-br from-app-accent1/20 to-app-accent2/20 flex items-center justify-center border border-white/5 shadow-inner"
                 >
-                  <i class="fas fa-check text-app-accent"></i>
+                  <i class="fas fa-check text-white"></i>
                 </div>
               </div>
 
               <div class="flex-grow space-y-5">
                 <!-- Principal -->
                 <div class="flex justify-between items-center group">
-                  <span class="text-gray-400 text-sm">Principal Amount</span>
-                  <span id="result-principal" class="font-medium text-gray-200"
+                  <span class="text-gray-400 text-sm font-medium"
+                    >Principal Amount</span
+                  >
+                  <span
+                    id="result-principal"
+                    class="font-semibold text-white mono-num"
                     >₹0.00</span
                   >
                 </div>
 
                 <!-- Rate -->
                 <div class="flex justify-between items-center group">
-                  <span class="text-gray-400 text-sm">Monthly Rate</span>
-                  <span id="result-rate" class="font-medium text-gray-200"
+                  <span class="text-gray-400 text-sm font-medium"
+                    >Monthly Rate</span
+                  >
+                  <span
+                    id="result-rate"
+                    class="font-semibold text-white mono-num"
                     >0%</span
                   >
                 </div>
 
                 <!-- Period -->
                 <div class="flex justify-between items-start group">
-                  <span class="text-gray-400 text-sm mt-0.5">Duration</span>
+                  <span class="text-gray-400 text-sm font-medium mt-0.5"
+                    >Duration</span
+                  >
                   <div class="text-right">
                     <span
                       id="result-duration-text"
-                      class="font-medium text-gray-200 block"
+                      class="font-semibold text-white block mono-num"
                       >0 Months</span
                     >
                     <span
                       id="result-date-range"
-                      class="text-xs text-gray-500 mt-1 block"
+                      class="text-xs text-gray-500 mt-1 block mono-num"
                       >-- to --</span
                     >
                   </div>
                 </div>
 
                 <div
-                  class="w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent my-6"
+                  class="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent my-6"
                 ></div>
 
                 <!-- Interest Breakdown -->
                 <div class="flex justify-between items-center group">
                   <span class="text-gray-400 text-sm">1 Month Interest</span>
-                  <span id="result-1-month" class="font-medium text-gray-200"
+                  <span
+                    id="result-1-month"
+                    class="font-medium text-gray-300 mono-num"
                     >₹0.00</span
                   >
                 </div>
@@ -370,7 +439,7 @@
                   <span class="text-gray-400 text-sm">Interest for Months</span>
                   <span
                     id="result-interest-months"
-                    class="font-medium text-app-accent"
+                    class="font-medium text-app-accent2 mono-num"
                     >₹0.00</span
                   >
                 </div>
@@ -378,39 +447,47 @@
                   <span class="text-gray-400 text-sm">Pro-rata (Days)</span>
                   <span
                     id="result-interest-days"
-                    class="font-medium text-app-accent"
+                    class="font-medium text-app-accent2 mono-num"
                     >₹0.00</span
                   >
                 </div>
 
-                <div class="flex justify-between items-center pt-2">
-                  <span class="text-gray-300 font-medium">Total Interest</span>
+                <div class="flex justify-between items-center pt-4">
+                  <span class="text-gray-200 font-semibold"
+                    >Total Interest</span
+                  >
                   <span
                     id="result-total-interest"
-                    class="font-bold text-app-accent"
+                    class="font-bold text-app-accent1 mono-num text-lg"
                     >₹0.00</span
                   >
                 </div>
               </div>
 
               <!-- Grand Total -->
-              <div class="mt-8 pt-6 border-t border-white/5">
-                <div class="flex justify-between items-end">
-                  <span class="text-gray-400 font-medium mb-1"
+              <div
+                class="mt-8 pt-6 border-t border-white/10 bg-app-solid/30 -mx-7 -mb-7 px-7 pb-7 rounded-b-[2rem]"
+              >
+                <div class="flex justify-between items-end gap-4">
+                  <span class="text-gray-400 font-medium mb-1 whitespace-nowrap"
                     >Maturity Amount</span
                   >
                   <span
                     id="result-total"
-                    class="text-3xl font-bold text-app-success tracking-tight drop-shadow-sm"
+                    class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-app-success to-emerald-300 tracking-tight drop-shadow-sm break-all text-right mono-num"
                     >₹0.00</span
                   >
                 </div>
               </div>
 
               <!-- Watermark/Footer inside card -->
-              <div class="mt-8 text-center opacity-50">
-                <p class="text-[10px] text-gray-500 uppercase tracking-widest">
-                  Generated by YieldCalc
+              <div
+                class="absolute bottom-3 w-full text-center left-0 opacity-40"
+              >
+                <p
+                  class="text-[9px] text-gray-500 uppercase tracking-widest font-mono"
+                >
+                  Generated securely by YieldCalc
                 </p>
               </div>
             </div>
@@ -418,20 +495,18 @@
         </div>
       </main>
 
-      <footer class="mt-12 text-center text-gray-500 text-sm font-medium">
+      <footer class="mt-16 text-center text-gray-500 text-sm font-medium">
         <p>
           © <span id="copyrightyear"></span> YieldCalc. Crafted by
           <a
             href="https://github.com/ranjan-builds"
             target="_blank"
-            class="text-app-accent hover:text-[#8ab4f8] transition-colors underline underline-offset-4 decoration-app-accent/30 hover:decoration-app-accent"
+            class="text-app-accent1 hover:text-white transition-colors underline underline-offset-4 decoration-app-accent1/30 hover:decoration-white"
             >Ranjan</a
           >.
         </p>
       </footer>
     </div>
-
-    <!-- External Libraries -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="script.js"></script>
   </body>
